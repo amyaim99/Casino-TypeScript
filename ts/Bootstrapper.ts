@@ -1,3 +1,4 @@
-/// <reference path="AliceAndBob.ts" />
-let aliceBob = new AliceAndBob();
-aliceBob.init();
+/// <reference path="GoFishGame.ts" />
+let goFishGame = new GoFishGame()
+let goFish: GoFish = new GoFish()
+    goFishGame.init()
