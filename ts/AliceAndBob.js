@@ -1,4 +1,4 @@
-var AliceAndBob = (function () {
+var AliceAndBob = /** @class */ (function () {
     function AliceAndBob() {
         this.displayElement = document.getElementById("display");
         this.userInputElement = document.getElementById("user_input");

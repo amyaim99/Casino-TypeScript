@@ -16,5 +16,5 @@ var Dice = /** @class */ (function () {
     Dice.prototype.showDice = function () {
         this.displayElement.innerHTML += this.rollDice(2);
     };
-    return Dice;
+    return Dice; 
 }());
