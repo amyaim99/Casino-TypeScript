@@ -65,7 +65,7 @@ case this.shooter = this.setPlayerPoint():
 this.gameMessage = "You win!(2nd roll?)";
 break;
 case 7:
-case 11:
+//case 11:
 this.gameMessage = "You lose!";
 // loseBet();
 this.gameStatus =2;
