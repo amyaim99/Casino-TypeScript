@@ -9,18 +9,14 @@ class Dice{
 
     //Dice made to be dynamic to adapt to dice needed per game.
     rollDice (diceNeeded: number){
-       // diceNeeded = parseInt(this.userInputElement.value)
-      //  console.log("is this ur inout" + diceNeeded)
-       // console.log("this is a test!")
+  
          var diceTotal: number = 0;
          var die;
          for(var i = 0; i < diceNeeded; i++){
-             die = (Math.random()*6) + 1;
+             die = (Math.random()*6);
              diceTotal += die;
          }
-         return diceTotal;
-
-      //  return this.displayElement+=diceTotal.toString
+         return Math.round(diceTotal);
 
     }
 
