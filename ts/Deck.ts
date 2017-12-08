@@ -14,21 +14,25 @@ class Deck{
                 Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.JACK, Rank.QUEEN,Rank.KING]
 
                 var card: Card = new Card(rankArray[j], suitArray[i])
-                console.log(card)
+                
             this.cards.push(card)
             
             }
         }
-        console.log(this.cards.length)
+        for (let i: number = this.cards.length - 1; i >= 0; i--){
+            var randomIndex: number = Math.floor(Math.random() * (i + 1));
+            var itemAtIndex: Card = this.cards[randomIndex];
+    
+            this.cards[randomIndex] = this.cards[i];
+            this.cards[i] = itemAtIndex;
+        }
     }
 
    
 
     
-    getDeck():Card[]{
+    
 
-        return this.cards;
-    }
    
         
    }

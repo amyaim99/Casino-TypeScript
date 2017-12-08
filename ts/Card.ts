@@ -1,3 +1,8 @@
+/// <reference path="Suit.ts" />
+/// <reference path="Rank.ts" />
+
+
+
 class Card{
 suit: Suit
 rank: Rank
@@ -17,7 +22,7 @@ getSuit():Suit{
         return this.suit
     }
 
-tostring():string{
+    public toString = () : string => {
         return this.rank+" "+ this.suit
     }
 
