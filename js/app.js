@@ -127,8 +127,6 @@ var BlackJack = /** @class */ (function () {
         if (this.blackJackPlayer.getscore() == 21) {
             this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Yeah, you won!"
                 + "</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button";
-            var response = this.userInputElement2.value;
-            this.playAgain(response);
         }
         return this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand";
     };
@@ -142,14 +140,10 @@ var BlackJack = /** @class */ (function () {
             if (this.blackJackPlayer.getscore() > 21) {
                 this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". The computer won"
                     + "</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button";
-                var response = this.userInputElement2.value;
-                this.playAgain(response);
             }
             else if (this.blackJackPlayer.getscore() == 21) {
                 this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Yeah, you won!"
                     + "</br> Do you want to play again? Pleas insert your reply and click the 'Play again' button";
-                var response = this.userInputElement2.value;
-                this.playAgain(response);
             }
             else
                 this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Do you want to hit or stay.";
@@ -167,19 +161,29 @@ var BlackJack = /** @class */ (function () {
         }
         else if (this.computerPlayer.getscore() <= 21) {
             this.displayElement.innerHTML += ". The computer stands.";
-            if (this.computerPlayer.getscore() > this.blackJackPlayer.getscore()) {
-                this.displayElement.innerHTML += ". The computer won.";
-            }
-            else {
-                this.displayElement.innerHTML += ". The player won.";
-            }
+            this.standResult();
+            console.log(this.blackJackPlayer.getscore() + "hmmm");
+        }
+    };
+    BlackJack.prototype.standResult = function () {
+        var comScore = this.computerPlayer.getscore();
+        var pScore = this.blackJackPlayer.getscore();
+        if (comScore > pScore || comScore == 21) {
+            this.displayElement.innerHTML += ". You lost!";
+        }
+        else if (comScore < pScore) {
+            this.displayElement.innerHTML += ". Yeah You WON!";
+        }
+        else {
+            this.displayElement.innerHTML += ". hmm who won?";
         }
     };
     BlackJack.prototype.computerHit = function () {
         this.giveComputerHand();
         var computerScore = this.computerHand[0].getValue() + this.computerHand[1].getValue();
-        console.log(computerScore);
-        console.log(this.computerPlayer.getscore);
+        if (computerScore >= 17 && computerScore <= 21) {
+            this.computerScoreCheck(this.computerHand);
+        }
         while (this.hitCheck(computerScore)) {
             var score = this.deck.cards[0].getValue();
             console.log(score);
@@ -191,15 +195,17 @@ var BlackJack = /** @class */ (function () {
         this.displayElement.innerHTML += "</br> The computer hits " + this.computerHand + ". Computer  score is " + computerScore;
         this.computerScoreCheck(this.computerHand);
     };
-    BlackJack.prototype.playAgain = function (reply) {
-        if (reply == "YES") {
-            this.displayElement.innerHTML += "Here is your card" + this.givePlayerHand();
+    BlackJack.prototype.playAgain = function () {
+        var reply = this.userInputElement2.value;
+        console.log(reply);
+        if (reply.toLocaleUpperCase() == "YES") {
+            this.displayElement = document.getElementById("display") + this.givePlayerHand();
         }
         else if (reply == "NO") {
-            this.displayElement.innerHTML += "Bye bye!";
+            this.displayElement.innerHTML += "</br>Bye bye!";
         }
         else {
-            this.displayElement.innerHTML += "Insert proper value!";
+            this.displayElement.innerHTML += "</br>Insert proper value!";
         }
     };
     return BlackJack;

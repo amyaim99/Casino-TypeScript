@@ -61,8 +61,6 @@ class BlackJack{
     if(this.blackJackPlayer.getscore()==21){
         this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore() + ". Yeah, you won!"
         +"</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button"
-        let response = this.userInputElement2.value
-        this.playAgain(response)
     }
     return this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand +". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand"    
     
@@ -78,14 +76,11 @@ class BlackJack{
         if(this.blackJackPlayer.getscore()>21){
             this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore() + ". The computer won"
             +"</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button"
-            let response = this.userInputElement2.value
-            this.playAgain(response)
         }
         else if(this.blackJackPlayer.getscore()==21){
             this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore() + ". Yeah, you won!"
             +"</br> Do you want to play again? Pleas insert your reply and click the 'Play again' button"
-            let response = this.userInputElement2.value
-            this.playAgain(response)
+           
         }else
         this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore()+ ". Do you want to hit or stay."
                
@@ -111,21 +106,33 @@ computerScoreCheck(cards:Card[]){
 else if (this.computerPlayer.getscore()<=21)
     {
         this.displayElement.innerHTML+=". The computer stands.";
-        if(this.computerPlayer.getscore() >this.blackJackPlayer.getscore()){
-            this.displayElement.innerHTML+=". The computer won.";
+        this.standResult()
+        console.log(this.blackJackPlayer.getscore()+"hmmm")
+    }
+}
+standResult(){
+    let comScore: number= this.computerPlayer.getscore() 
+    let pScore: number =  this.blackJackPlayer.getscore()
+        if(comScore > pScore || comScore == 21){
+            this.displayElement.innerHTML+=". You lost!";
         }
-        else{
-            this.displayElement.innerHTML+=". The player won.";
+        else if (comScore < pScore){
+            this.displayElement.innerHTML+=". Yeah You WON!"
+        }
+        else {
+            this.displayElement.innerHTML+=". hmm who won?";
         }
     }
    
-}
+
 
  computerHit( ){
     this.giveComputerHand()
     let computerScore:number = this.computerHand[0].getValue() + this.computerHand[1].getValue()
-    console.log(computerScore)
-        console.log(this.computerPlayer.getscore)
+        if(computerScore>=17 && computerScore <= 21){
+            this.computerScoreCheck(this.computerHand)
+
+        }
         
         while(this.hitCheck(computerScore))
         {
@@ -143,18 +150,20 @@ else if (this.computerPlayer.getscore()<=21)
         
     }
 
-    playAgain(reply: string){
-        if(reply == "YES"){
-
-       this.displayElement.innerHTML+= "Here is your card" + this.givePlayerHand()
+    playAgain(){
+        let reply:string = this.userInputElement2.value
+        console.log(reply)
+        if(reply.toLocaleUpperCase() == "YES"){
+        this.displayElement = document.getElementById("display")+ this.givePlayerHand();
+       
         }
 
         else if (reply == "NO"){
 
-        this.displayElement.innerHTML+="Bye bye!"
+        this.displayElement.innerHTML+="</br>Bye bye!"
         }
         else{
-            this.displayElement.innerHTML+="Insert proper value!" 
+            this.displayElement.innerHTML+="</br>Insert proper value!" 
         }
 
 
