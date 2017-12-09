@@ -238,7 +238,7 @@ var BlackJack = /** @class */ (function () {
         this.deck = new Deck();
         this.givePlayerHand();
         this.giveComputerHand();
-        this.getUserResponse.disabled = false;
+        //this.getUserResponse.disabled = false;
     };
     BlackJack.prototype.quit = function () {
         console.log("am I working");

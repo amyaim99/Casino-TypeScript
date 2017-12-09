@@ -173,7 +173,7 @@ standResult(){
         this.deck = new Deck()
         this.givePlayerHand()
         this.giveComputerHand()
-        this.getUserResponse.disabled = false;
+        //this.getUserResponse.disabled = false;
     
     }
 
