@@ -440,6 +440,7 @@ var CrapsCash = /** @class */ (function () {
         this.userInputElement = document.getElementById("user_input");
     }
     CrapsCash.prototype.setPlrCash = function (playerINPUT) {
+        var response = this.userInputElement.value;
         var playerCash = "player input";
         return playerCash;
     };
@@ -453,6 +454,12 @@ var CrapsCash = /** @class */ (function () {
         }
         else if () {
         }
+    };
+    CrapsCash.prototype.addPlyrWinnings = function () {
+        //add setPlyrBet to plyrCashAvail
+    };
+    CrapsCash.prototype.minusPlyrLoss = function () {
+        //minus setPlyrBet to plyrCashAvail
     };
     return CrapsCash;
 }());

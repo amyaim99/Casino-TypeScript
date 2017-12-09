@@ -11,6 +11,7 @@ betMessage: string;
 getPlyrCashAvail: number;
 
 setPlrCash(playerINPUT){
+    var response = this.userInputElement.value
     let playerCash = "player input";
     return playerCash;
 }
@@ -33,5 +34,12 @@ setPlyrBet(inputfrompler:number){
     }
 }
 
+addPlyrWinnings(){
+    //add setPlyrBet to plyrCashAvail
+}
+
+minusPlyrLoss(){
+    //minus setPlyrBet to plyrCashAvail
+}
 
 }
