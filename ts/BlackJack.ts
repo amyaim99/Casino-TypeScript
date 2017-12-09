@@ -1,4 +1,5 @@
-/// <reference path="Player.ts" />
+
+/// <reference path="MoneyPlayer.ts" />
 /// <reference path="Card.ts" />
 /// <reference path="Deck.ts" />
 
@@ -6,20 +7,25 @@
 class BlackJack{
     
     private deck: Deck
-    private blackJackPlayer: Player
-    private computerPlayer: Player
+    private blackJackPlayer: MoneyPlayer
+    private computerPlayer: MoneyPlayer
     private playerHand: Card[]=[]
     private computerHand: Card[]=[]
     private displayElement:any
     private  userInputElement: any 
     private  userInputElement2: any 
+    private getHandButton: any
+    private getPlayerName:any
+
     
     constructor(){
-        this.blackJackPlayer = new Player()
+        this.blackJackPlayer = new MoneyPlayer()
         this.deck = new Deck()
-        this.computerPlayer = new Player
+        this.computerPlayer = new MoneyPlayer()
         this.computerHand = []
         this.playerHand =[]
+        this.getPlayerName = document.getElementById("getPlayerName");
+        this.getHandButton = document.getElementById("getHand");
         this.displayElement = document.getElementById("display");
         this.userInputElement2= document.getElementById("user_input2");
         this.userInputElement= document.getElementById("user_input");
@@ -29,6 +35,7 @@ class BlackJack{
     getUserResponse () {
         this.blackJackPlayer.setName(this.userInputElement.value) 
         this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() + " Please click GetHand button to continue!"
+        this.getPlayerName.disabled = true;
         
     }
     
@@ -40,9 +47,7 @@ class BlackJack{
             cards.push(this.deck.cards[i])
             var index = this.deck.cards.indexOf(this.deck.cards[i], 0);
             if (index > -1) {
-                this.deck.cards.splice(index, 1);
-            }
-            
+                this.deck.cards.splice(index, 1); }
             i++
     }
         return cards;
@@ -53,17 +58,21 @@ class BlackJack{
         
     }
     
-    givePlayerHand():string{
+    givePlayerHand(){
         
-    this.giveHand(this.playerHand);
+        
+   this.playerHand= this.giveHand(this.playerHand);
         this.blackJackPlayer.setScore( this.playerHand[0].getValue() +this.playerHand[1].getValue())
-    let element = document.getElementById("display")
-    if(this.blackJackPlayer.getscore()==21){
+         if(this.blackJackPlayer.getscore()==21){
         this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore() + ". Yeah, you won!"
-        +"</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button"
+        +"</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button. Put your bet amount and click bet"
     }
-    return this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand +". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand"    
-    
+   this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand +". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand"  
+  
+   console.log('before:', this.getHandButton.disabled);
+   this.getHandButton.disabled = true;
+   console.log('after:', this.getHandButton.disabled);
+   
     }
    
    playerHit() {
@@ -75,11 +84,11 @@ class BlackJack{
         this.blackJackPlayer.setScore(this.blackJackPlayer.getscore()+ score)
         if(this.blackJackPlayer.getscore()>21){
             this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore() + ". The computer won"
-            +"</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button"
+            +"</br>  click play again to play again or quit to leave the game"
         }
         else if(this.blackJackPlayer.getscore()==21){
             this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore() + ". Yeah, you won!"
-            +"</br> Do you want to play again? Pleas insert your reply and click the 'Play again' button"
+            +"</br> click play again to play again or quit to leave the game"
            
         }else
         this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your total score is " +this.blackJackPlayer.getscore()+ ". Do you want to hit or stay."
@@ -110,17 +119,28 @@ else if (this.computerPlayer.getscore()<=21)
         console.log(this.blackJackPlayer.getscore()+"hmmm")
     }
 }
+
 standResult(){
+    let betValue = this.userInputElement2.value
     let comScore: number= this.computerPlayer.getscore() 
     let pScore: number =  this.blackJackPlayer.getscore()
         if(comScore > pScore || comScore == 21){
+            let playerMoney= this.blackJackPlayer.getMoney()
+            playerMoney-= parseInt(betValue);
+            this.blackJackPlayer.setMoney(playerMoney)
+            this.displayElement.innerHTML+=". Yeah You WON!. You have " + this.blackJackPlayer.getMoney()
             this.displayElement.innerHTML+=". You lost!";
+        
         }
         else if (comScore < pScore){
-            this.displayElement.innerHTML+=". Yeah You WON!"
+            let playerMoney= this.blackJackPlayer.getMoney()
+              playerMoney+= parseInt(betValue);
+              this.blackJackPlayer.setMoney(playerMoney)
+          this.displayElement.innerHTML+=". Yeah You WON!. You have " + this.blackJackPlayer.getMoney()
+        
         }
         else {
-            this.displayElement.innerHTML+=". hmm who won?";
+            this.displayElement.innerHTML+=". wow its a tie";
         }
     }
    
@@ -142,30 +162,30 @@ standResult(){
                 this.deck.cards.splice(0, 1);
                 this.computerPlayer.setScore(this.computerPlayer.getscore()+ score)
                 computerScore = this.computerPlayer.getscore()
-               
-                       
                } 
                this.displayElement.innerHTML += "</br> The computer hits "+ this.computerHand+ ". Computer  score is " +computerScore
             this.computerScoreCheck(this.computerHand)
+    }
+
+
+    playAgain(){
+        
+        this.deck = new Deck()
+        this.givePlayerHand()
+        this.giveComputerHand()
+        this.getUserResponse.disabled = false;
+    
+    }
+
+    quit(){
+        console.log("am I working")
+       
+        this.displayElement.innerHTML = "</br></br>Thank you! It was nice playing with you, lets do it again sometime soon. Bye bye!"
+
+    }  
+    clean(){
         
     }
 
-    playAgain(){
-        let reply:string = this.userInputElement2.value
-        console.log(reply)
-        if(reply.toLocaleUpperCase() == "YES"){
-        this.displayElement = document.getElementById("display")+ this.givePlayerHand();
-       
-        }
-
-        else if (reply == "NO"){
-
-        this.displayElement.innerHTML+="</br>Bye bye!"
-        }
-        else{
-            this.displayElement.innerHTML+="</br>Insert proper value!" 
-        }
-
-
     }
-    }
+    

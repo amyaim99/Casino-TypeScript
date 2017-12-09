@@ -25,6 +25,7 @@
             <font size="8" color="red">Welcome to BlackJack </font></br>
             <font size="4" color="green">Please insert the name you want to use for the game</font></br>
             <img src="./images/logos/blackjack.jpg" alt="BlackJack" style="width:600px;height:150px;">  
+            <div id="miniDisplay"> </div>
 
                
         </div>
@@ -32,20 +33,35 @@
 			<div id="input">
                     <div id="input">
                             <input type="text" name="user_input" id="user_input">
-                            <input type="submit" value="Nick Name" onclick="blackJack.getUserResponse()">
+                            <button onclick="blackJack.getUserResponse()" id="getPlayerName">Get Name</button>
                         </div> 
                     </br>  
                         
-                    <div id="getHand">
-                         
-                            <input type="submit" value="GetHand" onclick="blackJack.givePlayerHand()">
-                            <input type="submit" value="Hit" onclick="blackJack.playerHit()">
-                            <input type="submit" value="Stand" onclick="blackJack.computerHit()">
+                    <div>
+                        </div> 
+                        <div >
+                                <button  onclick="blackJack.givePlayerHand()" id="getHand">Get Hand </button>
+                        </div> 
+                        
+                        <div id="hit">
+                              <input type="submit" value="Hit" onclick="blackJack.playerHit()">  
+                        </div> 
+                        <div id="stand">
+                                <input type="submit" value="Stand" onclick="blackJack.computerHit()">
+                        </div> 
+                        <div id="playAgain">
+                                <input type="submit" value="Play Again" onclick="blackJack.playAgain()">
+                        </div> 
+                        <div id="quite">
+                                <input type="submit" value="Quit" onclick="blackJack.quit()">
+                        </div> 
+
+                        
                         </div> 
                     </br>     
                     <div id="input">
                         <input type="text" name="user_input" id="user_input2">
-                        <input type="submit" value="Play Again" onclick="blackJack.playAgain()">
+                        <input type="submit" value="Bet" onclick="blackJack.bet()">
                     </div> 
                         
 				 
