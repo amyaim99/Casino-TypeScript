@@ -12,37 +12,40 @@
 <body>
     <header class="main-header group">
         <div class="title"></div>
-        <div class="lesson-link"><img src="./images/logos/js_logo.png" alt="Javascript"/></div>
+        <div class="lesson-link"><img src="./images/logos/blackjack.jpg" alt="Casino"/></div>
         <div class="zip-link"><img src="./images/logos/zip_logo.jpg" alt="Zipcode Wilmington"/></div>
     </header>
 
-    <h1>TypeScript Casino</h1>
+    <h1>Casino</h1>
     
 
-    <section id="main">
+    <section id="main"  >
        
-        <div id="display">
-                <h2>Welcome to GoFish </h2>
-                   <h3> Please insert the name you want to use for the game</h3>
-                   
+        <div id="display"  >
+            <font size="8" color="red">Welcome to BlackJack </font></br>
+            <font size="4" color="green">Please insert the name you want to use for the game</font></br>
+            <img src="./images/logos/blackjack.jpg" alt="BlackJack" style="width:600px;height:150px;">  
+
                
         </div>
         
 			<div id="input">
                     <div id="input">
                             <input type="text" name="user_input" id="user_input">
-                            <input type="submit" value="submit" onclick="goFish.getUserResponse()">
+                            <input type="submit" value="Nick Name" onclick="blackJack.getUserResponse()">
                         </div> 
                     </br>  
                         
                     <div id="getHand">
                          
-                            <input type="submit" value="GetHand" onclick="goFish.givePlayerHand()">
+                            <input type="submit" value="GetHand" onclick="blackJack.givePlayerHand()">
+                            <input type="submit" value="Hit" onclick="blackJack.playerHit()">
+                            <input type="submit" value="Stand" onclick="blackJack.computerHit()">
                         </div> 
                     </br>     
                     <div id="input">
                         <input type="text" name="user_input" id="user_input2">
-                        <input type="submit" value="GetCard" onclick="goFish.askComputerHandForACArd()">
+                        <input type="submit" value="Play Again" onclick="blackJack.playAgain()">
                     </div> 
                         
 				 

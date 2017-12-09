@@ -2,3 +2,4 @@
 
 let goFishGame = new GoFishGame()
 let goFish = new GoFish()
+let blackJack = new BlackJack()

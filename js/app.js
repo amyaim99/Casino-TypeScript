@@ -12,6 +12,9 @@ var Player = /** @class */ (function () {
     Player.prototype.setName = function (name) {
         this.name = name;
     };
+    Player.prototype.setScore = function (score) {
+        this.score = score;
+    };
     return Player;
 }());
 var Suit;
@@ -48,8 +51,11 @@ var Card = /** @class */ (function () {
         this.rank = rank;
         this.suit = suit;
     }
-    Card.prototype.getRank = function () {
-        return this.rank;
+    Card.prototype.getValue = function () {
+        if (this.rank == "Q" || this.rank == "J" || this.rank == "K")
+            return 10;
+        else
+            return parseInt(this.rank);
     };
     Card.prototype.getSuit = function () {
         return this.suit;
@@ -81,6 +87,126 @@ var Deck = /** @class */ (function () {
 /// <reference path="Player.ts" />
 /// <reference path="Card.ts" />
 /// <reference path="Deck.ts" />
+var BlackJack = /** @class */ (function () {
+    function BlackJack() {
+        this.playerHand = [];
+        this.computerHand = [];
+        this.blackJackPlayer = new Player();
+        this.deck = new Deck();
+        this.computerPlayer = new Player;
+        this.computerHand = [];
+        this.playerHand = [];
+        this.displayElement = document.getElementById("display");
+        this.userInputElement2 = document.getElementById("user_input2");
+        this.userInputElement = document.getElementById("user_input");
+    }
+    BlackJack.prototype.getUserResponse = function () {
+        this.blackJackPlayer.setName(this.userInputElement.value);
+        this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() + " Please click GetHand button to continue!";
+    };
+    BlackJack.prototype.giveHand = function (cards) {
+        var i = 0;
+        while (cards.length != 2) {
+            this.deck.cards.shift[i];
+            cards.push(this.deck.cards[i]);
+            var index = this.deck.cards.indexOf(this.deck.cards[i], 0);
+            if (index > -1) {
+                this.deck.cards.splice(index, 1);
+            }
+            i++;
+        }
+        return cards;
+    };
+    BlackJack.prototype.giveComputerHand = function () {
+        this.giveHand(this.computerHand);
+    };
+    BlackJack.prototype.givePlayerHand = function () {
+        this.giveHand(this.playerHand);
+        this.blackJackPlayer.setScore(this.playerHand[0].getValue() + this.playerHand[1].getValue());
+        var element = document.getElementById("display");
+        if (this.blackJackPlayer.getscore() == 21) {
+            this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Yeah, you won!"
+                + "</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button";
+            var response = this.userInputElement2.value;
+            this.playAgain(response);
+        }
+        return this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand";
+    };
+    BlackJack.prototype.playerHit = function () {
+        if (this.deck.cards.length > 0) {
+            var score = this.deck.cards[0].getValue();
+            console.log(score);
+            this.playerHand.push(this.deck.cards[0]);
+            this.deck.cards.splice(0, 1);
+            this.blackJackPlayer.setScore(this.blackJackPlayer.getscore() + score);
+            if (this.blackJackPlayer.getscore() > 21) {
+                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". The computer won"
+                    + "</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button";
+                var response = this.userInputElement2.value;
+                this.playAgain(response);
+            }
+            else if (this.blackJackPlayer.getscore() == 21) {
+                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Yeah, you won!"
+                    + "</br> Do you want to play again? Pleas insert your reply and click the 'Play again' button";
+                var response = this.userInputElement2.value;
+                this.playAgain(response);
+            }
+            else
+                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Do you want to hit or stay.";
+        }
+    };
+    BlackJack.prototype.hitCheck = function (score) {
+        if (score < 17) {
+            return true;
+        }
+        return false;
+    };
+    BlackJack.prototype.computerScoreCheck = function (cards) {
+        if (this.computerPlayer.getscore() > 21) {
+            this.displayElement.innerHTML += " The computer is busted!";
+        }
+        else if (this.computerPlayer.getscore() <= 21) {
+            this.displayElement.innerHTML += ". The computer stands.";
+            if (this.computerPlayer.getscore() > this.blackJackPlayer.getscore()) {
+                this.displayElement.innerHTML += ". The computer won.";
+            }
+            else {
+                this.displayElement.innerHTML += ". The player won.";
+            }
+        }
+    };
+    BlackJack.prototype.computerHit = function () {
+        this.giveComputerHand();
+        var computerScore = this.computerHand[0].getValue() + this.computerHand[1].getValue();
+        console.log(computerScore);
+        console.log(this.computerPlayer.getscore);
+        while (this.hitCheck(computerScore)) {
+            var score = this.deck.cards[0].getValue();
+            console.log(score);
+            this.computerHand.push(this.deck.cards[0]);
+            this.deck.cards.splice(0, 1);
+            this.computerPlayer.setScore(this.computerPlayer.getscore() + score);
+            computerScore = this.computerPlayer.getscore();
+        }
+        this.displayElement.innerHTML += "</br> The computer hits " + this.computerHand + ". Computer  score is " + computerScore;
+        this.computerScoreCheck(this.computerHand);
+    };
+    BlackJack.prototype.playAgain = function (reply) {
+        if (reply == "YES") {
+            this.displayElement.innerHTML += "Here is your card" + this.givePlayerHand();
+        }
+        else if (reply == "NO") {
+            this.displayElement.innerHTML += "Bye bye!";
+        }
+        else {
+            this.displayElement.innerHTML += "Insert proper value!";
+        }
+    };
+    return BlackJack;
+}());
+/// <reference path="Player.ts" />
+/// <reference path="Card.ts" />
+/// <reference path="Deck.ts" />
 var GoFish = /** @class */ (function () {
     function GoFish() {
         this.playerHand = [];
@@ -91,6 +217,7 @@ var GoFish = /** @class */ (function () {
         this.computerHand = [];
         this.playerHand = [];
         this.displayElement = document.getElementById("display");
+        this.userInputElement2 = document.getElementById("user_input2");
         this.userInputElement = document.getElementById("user_input");
     }
     GoFish.prototype.getUserResponse = function () {
@@ -117,34 +244,25 @@ var GoFish = /** @class */ (function () {
         this.giveHand(this.playerHand);
         this.giveComputerHand();
         var element = document.getElementById("display");
+        console.log(this.deck.cards.length);
         return element.innerHTML += "</br>" + "your card is " + this.playerHand + ". Click GetCard to continue";
     };
-    GoFish.prototype.checkPlayersCardRequestForGameRule = function (input) {
-        this.givePlayerHand();
-        console.log("Am I working");
-        input = this.userInputElement.value;
-        var checkresult = false;
-        //let element = document.getElementById("display")
-        for (var i = 0; i < this.playerHand.length; i++) {
-            if (input.toUpperCase() == this.playerHand[i].rank) {
-                checkresult = true;
-                // checkresult = "</br>" + element.innerHTML +" " + this.askComputerHandForACArd(input);
-                break;
-            }
+    GoFish.prototype.checkCardExistance = function (cards, rank) {
+        var checkOutcome = false;
+        for (var i = 0; i < cards.length; i++) {
+            if (cards[i].rank == rank)
+                checkOutcome = true;
         }
-        checkresult = false;
-        //console.log("the input is not correct")
-        // checkresult =  checkresult = "</br>" + element.innerHTML +" " + "insert proper value";
-        //input= this.userInputElement.value
-        console.log(checkresult);
-        console.log(this.playerHand);
-        return checkresult;
+        return checkOutcome;
+    };
+    GoFish.prototype.checkComputerHandForPlayerRequestCard = function (rank) {
+        this.giveComputerHand();
+        return this.checkCardExistance(this.computerHand, rank);
     };
     GoFish.prototype.askComputerHandForACArd = function (cardRank) {
-        cardRank = this.userInputElement.value;
-        var cards = [];
-        var card;
-        console.log(this.checkComputerHandForPlayerRequestCard(cardRank));
+        this.giveComputerHand();
+        this.givePlayerHand();
+        cardRank = this.userInputElement2.value;
         if (this.checkComputerHandForPlayerRequestCard) {
             for (var i = 0; i < this.computerHand.length; i++) {
                 //card= this.computerHand[i]
@@ -156,9 +274,12 @@ var GoFish = /** @class */ (function () {
                     }
                 }
             }
+            return this.displayElement.innerHTML += "</br>" + "The computer has " + cardRank + ". Your card is " + this.playerHand + ". Click GetCard to continue";
         }
+        else
+            this.goFishingPlayer();
         // let element = document.getElementById("display")
-        //  return element.innerHTML += "</br>" + "your card is " + this.playerHand +". Click GetCard to continue"
+        return this.displayElement.innerHTML += "</br>" + "the computer doesnt have your card. GoFishing. Your card is " + this.playerHand + ". Click GetCard to continue";
     };
     GoFish.prototype.getMaximimRepeatingCard = function (cards) {
         if (cards.length == 0) {
@@ -183,21 +304,6 @@ var GoFish = /** @class */ (function () {
     GoFish.prototype.computerCardToRequest = function () {
         this.giveComputerHand();
         return this.getMaximimRepeatingCard(this.computerHand);
-    };
-    GoFish.prototype.checkCardExistance = function (cards, rank) {
-        var checkOutcome = false;
-        for (var i = 0; i < cards.length; i++) {
-            if (cards[i].rank == rank)
-                checkOutcome = true;
-        }
-        return checkOutcome;
-    };
-    GoFish.prototype.checkComputerHandForPlayerRequestCard = function (rank) {
-        rank = this.userInputElement.value;
-        this.giveComputerHand();
-        console.log(this.checkCardExistance(this.computerHand, rank));
-        console.log(this.computerHand);
-        return this.checkCardExistance(this.computerHand, rank);
     };
     GoFish.prototype.checkPlayerHasRequestedCardRank = function (rank) {
         this.givePlayerHand();
@@ -252,6 +358,27 @@ var GoFish = /** @class */ (function () {
         else
             console.log("The deck is empty. Game over");
     };
+    // checkPlayersCardRequestForGameRule(input: string):Boolean {
+    //     this.givePlayerHand()
+    //     console.log("Am I working")
+    //    input= this.userInputElement.value
+    //    let checkresult:Boolean = false;
+    //     //let element = document.getElementById("display")
+    //     for (let i = 0; i < this.playerHand.length; i++) {
+    //         if (input == this.playerHand[i].rank) {
+    //             checkresult = true;
+    //            // checkresult = "</br>" + element.innerHTML +" " + this.askComputerHandForACArd(input);
+    //             break;
+    //         } 
+    //     }
+    //             checkresult = false;
+    //             //console.log("the input is not correct")
+    //            // checkresult =  checkresult = "</br>" + element.innerHTML +" " + "insert proper value";
+    //             //input= this.userInputElement.value
+    //         console.log(checkresult)
+    //         console.log(this.playerHand)
+    //     return checkresult;
+    // }
     GoFish.prototype.countBooksInHand = function (cards) {
         if (cards.length == 0) {
             return null;
@@ -342,4 +469,5 @@ var GoFishGame = /** @class */ (function () {
 /// <reference path="GoFishGame.ts" />
 var goFishGame = new GoFishGame();
 var goFish = new GoFish();
+var blackJack = new BlackJack();
 //# sourceMappingURL=app.js.map
