@@ -1,6 +1,8 @@
 /// <reference path="Dice.ts" />
 /// <reference path="Craps.ts" />
 /// <reference path="GoFishGame.ts" />
+/// <reference path="CrapsCash.ts" />
+
 
 // let aliceBob = new AliceAndBob();
 // aliceBob.init();

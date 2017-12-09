@@ -431,9 +431,35 @@ var GoFishGame = /** @class */ (function () {
     };
     return GoFishGame;
 }());
+var CrapsCash = /** @class */ (function () {
+    function CrapsCash() {
+        this.takePlyrBet = function () {
+            this.getPlyrCashAvail -= setPlyrBet();
+        };
+        this.displayElement = document.getElementById("display");
+        this.userInputElement = document.getElementById("user_input");
+    }
+    CrapsCash.prototype.setPlrCash = function (playerINPUT) {
+        var playerCash = "player input";
+        return playerCash;
+    };
+    CrapsCash.prototype.plyrCashAvail = function () {
+        var getPlyrCashAvail = this.setPlrCash;
+        return getPlyrCashAvail;
+    };
+    CrapsCash.prototype.setPlyrBet = function (inputfrompler) {
+        this.betMessage = "";
+        if (inputfrompler <= this.plyrCashAvail) {
+        }
+        else if () {
+        }
+    };
+    return CrapsCash;
+}());
 /// <reference path="Dice.ts" />
 /// <reference path="Craps.ts" />
 /// <reference path="GoFishGame.ts" />
+/// <reference path="CrapsCash.ts" />
 // let aliceBob = new AliceAndBob();
 // aliceBob.init();
 var dice = new Dice();
