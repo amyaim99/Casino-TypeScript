@@ -9,6 +9,7 @@
 
 let dice = new Dice();
 let craps = new Craps();
+let crapscash = new CrapsCash();
 //drt.rollDice();
 //document.getElementById("display").innerHTML+="string";
 //var diceRollTotal = drt.rollDice(2);

@@ -22,13 +22,21 @@
     <h1>Welcome to the Craps Table </h1>
 
     <section id="main">
-    	<div id="display"></div>
+        <div id="display"></div>
+
 			<div id="input">
-				<input type="text" name="user_input" id="user_input">
+                    <input type="text" name="plyrCashToTable" id="plyrCashToTable">
+                    <input type="submit" value="Money at table" onclick="crapscash.plyrCashToTable()"></div><p></p>
+                    <input type="text" name="plyrBet" id="plyrBet">
+                    <input type="submit" value="Place A bet" onclick="crapscash.currentPlyrBet()"></div><p></p>
+				<!--<input type="text" name="user_input" id="user_input">-->
                 <input type="submit" value="Roll Dice" onclick= "craps.firstDiceRoll()">
                 <input type="submit" value="Roll Dice 2" onclick= "craps.nextDiceRoll()">
 			</div>
     </section>
+
+
+
 
  	<script type="text/javascript" src="js/app.js"></script>
 </body>
