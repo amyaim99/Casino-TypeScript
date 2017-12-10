@@ -1,11 +1,11 @@
 class Player{
 
 private name:string
-private score:number
+private score: number
 
 constructor(){
     this.name = name
-    this.score =0
+    this.score = 0
 }
 
  getName():string{
@@ -18,6 +18,10 @@ getscore():number{
 
 setName(name:string){
     this.name= name
+}
+
+setScore(score:number){
+    this.score= score
 }
 
 

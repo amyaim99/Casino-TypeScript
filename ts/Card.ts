@@ -13,9 +13,12 @@ constructor(rank:Rank, suit:Suit){
     this.suit = suit
 }
 
-getRank():Rank{
+getValue():number{
+    if(this.rank=="Q" || this.rank=="J" || this.rank=="K")
+    return 10
 
-    return this.rank
+    else
+    return parseInt(this.rank)
 }
 getSuit():Suit{
     
