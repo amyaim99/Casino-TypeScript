@@ -10,6 +10,7 @@ class BlackJack{
     private dealer: MoneyPlayer;
     private playerHand: Card[]=[];
     private dealerHand: Card[]=[];
+    private totalBetAMount:number
     private displayElement:any;
     private userInputElement: any; 
     private userInputElement2: any; 
@@ -28,6 +29,7 @@ class BlackJack{
         this.dealer = new MoneyPlayer();
         this.dealerHand = [];
         this.playerHand =[];
+        this.totalBetAMount = 0;
         this.getPlayerNameButton = document.getElementById("getPlayerName");
         this.getHandButton = document.getElementById("getHand");
         this.displayElement = document.getElementById("miniDisplay");
@@ -56,30 +58,35 @@ class BlackJack{
         }
 
     getUserResponse () {
+        this.displayElement.innerHTML =""
         this.blackJackPlayer.setName(this.setPlayerName()); 
         this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() +"!." + " Please put your bet and click GetHand button to continue!"
         this.getPlayerNameButton.disabled = true;
         this.getBetButton.disabled = false;
+        this.userInputElement.value="";
     }
 
     setBetAmount(){
         let betAmount: number = this.userInputElement2.value;
-        let totalBetAMount =0;
-        totalBetAMount+=betAmount;
+        this.totalBetAMount+=betAmount;
         let response: string= "";
         if(isNaN(betAmount)|| betAmount.toString()==""){
             this.displayElement.innerHTML += "</br> Please insert proper value";
+            this.userInputElement2.value="";
         }
-        else if(betAmount >= this.blackJackPlayer.getMoney()){
-            this.displayElement.innerHTML += "</br></br>You dont have enough money. Please bet smaller amount.";
+        else if(betAmount > this.blackJackPlayer.getMoney()){
+            this.displayElement.innerHTML += "</br>You dont have enough money. Please bet smaller amount.";
+            this.userInputElement2.value="";
         }
-        else if(totalBetAMount >= this.blackJackPlayer.getMoney()){
+        else if( this.totalBetAMount==0){
+            console.log(this.blackJackPlayer.getMoney())
             this.quit();
-            this.displayElement.innerHTML += "</br></br>You finished your money.";
+            this.displayElement.innerHTML += "</br>You finished your money.";
+            this.userInputElement2.value="";
            this.getBetButton.disabled = true;
         }
         else {
-            this.displayElement.innerHTML +="</br>Your bet is " + betAmount+ ". Good Luck!";
+            this.displayElement.innerHTML +="</br>Your bet is $" + betAmount+ ". Good Luck!";
             this.getBetButton.disabled = true;
         }
         this.getHandButton.disabled = false;
@@ -100,6 +107,7 @@ class BlackJack{
 
     enableQuitAndPlayAGainButNotHitButtton(){
         this.hitButton.disabled = true;
+        this.standButton.disabled = true;
         this.playAgainButton.disabled = false;
         this.quitButton.disabled = false;
     }
@@ -117,9 +125,9 @@ class BlackJack{
     }
     else{ this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand +". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand";  
         this.getHandButton.disabled = true;
-        }
         this.hitButton.disabled = false;
         this.standButton.disabled = false;
+    }
     }
    
    playerHit() {
@@ -141,6 +149,7 @@ class BlackJack{
         this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your score is " +this.blackJackPlayer.getscore() + ". You WON!"
         +"</br> you have " + "$" + this.blackJackPlayer.getMoney()+ "</br> To play again, click Play Again and also put your bet amount and click bet";
             this.enableQuitAndPlayAGainButNotHitButtton();
+           
     }        
         else
         this.displayElement.innerHTML += "</br>" +"your card is "+ this.playerHand+ ". Your  score is " +this.blackJackPlayer.getscore()+ ". Do you want to hit or stay."
@@ -229,16 +238,23 @@ class BlackJack{
     }
 
     quit(){
-        this.displayElement.innerHTML = "</br></br>Thank you! It was nice playing with you, lets do it again sometime soon. Bye bye!";
+        this.displayElement.innerHTML = "</br>Thank you " + this.blackJackPlayer.getName()+"! It was nice playing with you, lets do it again sometime soon. Bye bye!";
         this.playAgainButton.disabled = true;
+        this.getPlayerNameButton.disabled = false;
+        this.userInputElement2.value ="";
+        this.totalBetAMount =0;
+        this.blackJackPlayer.setMoney(500);
+        console.log(this.blackJackPlayer.getMoney())
     } 
     
     playAgain(){
         console.log("Am I working")
-        this.displayElement.innerHTML = "</br></br>Thank you for playing again! Please put your bet anc click GetHand";
-        this.deck = new Deck()
+        this.displayElement.innerHTML = "</br></br>Thank you for playing again " + this.blackJackPlayer.getName() + "! Please put your bet and click GetHand";
+        this.deck = new Deck();
+        this.playerHand= this.giveHand(this.playerHand);
+        this.userInputElement2.value ="";
         this.getBetButton.disabled = false;
-        this.giveDealerHand();
+        this.playAgainButton.disabled= true;
     }
 
 

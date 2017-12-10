@@ -143,10 +143,10 @@ a.button {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
-    background-color: #4CAF50; /* Green */
+    background-color: rgb(245, 247, 245); /* white */
     border: none;
     color: black;
-    padding: 30px 64px;
+    padding: 5px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;

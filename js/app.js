@@ -122,6 +122,7 @@ var BlackJack = /** @class */ (function () {
         this.dealer = new MoneyPlayer();
         this.dealerHand = [];
         this.playerHand = [];
+        this.totalBetAMount = 0;
         this.getPlayerNameButton = document.getElementById("getPlayerName");
         this.getHandButton = document.getElementById("getHand");
         this.displayElement = document.getElementById("miniDisplay");
@@ -151,29 +152,34 @@ var BlackJack = /** @class */ (function () {
         }
     };
     BlackJack.prototype.getUserResponse = function () {
+        this.displayElement.innerHTML = "";
         this.blackJackPlayer.setName(this.setPlayerName());
         this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() + "!." + " Please put your bet and click GetHand button to continue!";
         this.getPlayerNameButton.disabled = true;
         this.getBetButton.disabled = false;
+        this.userInputElement.value = "";
     };
     BlackJack.prototype.setBetAmount = function () {
         var betAmount = this.userInputElement2.value;
-        var totalBetAMount = 0;
-        totalBetAMount += betAmount;
+        this.totalBetAMount += betAmount;
         var response = "";
         if (isNaN(betAmount) || betAmount.toString() == "") {
             this.displayElement.innerHTML += "</br> Please insert proper value";
+            this.userInputElement2.value = "";
         }
-        else if (betAmount >= this.blackJackPlayer.getMoney()) {
-            this.displayElement.innerHTML += "</br></br>You dont have enough money. Please bet smaller amount.";
+        else if (betAmount > this.blackJackPlayer.getMoney()) {
+            this.displayElement.innerHTML += "</br>You dont have enough money. Please bet smaller amount.";
+            this.userInputElement2.value = "";
         }
-        else if (totalBetAMount >= this.blackJackPlayer.getMoney()) {
+        else if (this.totalBetAMount == 0) {
+            console.log(this.blackJackPlayer.getMoney());
             this.quit();
-            this.displayElement.innerHTML += "</br></br>You finished your money.";
+            this.displayElement.innerHTML += "</br>You finished your money.";
+            this.userInputElement2.value = "";
             this.getBetButton.disabled = true;
         }
         else {
-            this.displayElement.innerHTML += "</br>Your bet is " + betAmount + ". Good Luck!";
+            this.displayElement.innerHTML += "</br>Your bet is $" + betAmount + ". Good Luck!";
             this.getBetButton.disabled = true;
         }
         this.getHandButton.disabled = false;
@@ -193,6 +199,7 @@ var BlackJack = /** @class */ (function () {
     };
     BlackJack.prototype.enableQuitAndPlayAGainButNotHitButtton = function () {
         this.hitButton.disabled = true;
+        this.standButton.disabled = true;
         this.playAgainButton.disabled = false;
         this.quitButton.disabled = false;
     };
@@ -210,9 +217,9 @@ var BlackJack = /** @class */ (function () {
         else {
             this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand";
             this.getHandButton.disabled = true;
+            this.hitButton.disabled = false;
+            this.standButton.disabled = false;
         }
-        this.hitButton.disabled = false;
-        this.standButton.disabled = false;
     };
     BlackJack.prototype.playerHit = function () {
         if (this.deck.cards.length > 0) {
@@ -313,17 +320,42 @@ var BlackJack = /** @class */ (function () {
         }
     };
     BlackJack.prototype.quit = function () {
-        this.displayElement.innerHTML = "</br></br>Thank you! It was nice playing with you, lets do it again sometime soon. Bye bye!";
+        this.displayElement.innerHTML = "</br>Thank you " + this.blackJackPlayer.getName() + "! It was nice playing with you, lets do it again sometime soon. Bye bye!";
         this.playAgainButton.disabled = true;
+        this.getPlayerNameButton.disabled = false;
+        this.userInputElement2.value = "";
+        this.totalBetAMount = 0;
+        this.blackJackPlayer.setMoney(500);
+        console.log(this.blackJackPlayer.getMoney());
     };
     BlackJack.prototype.playAgain = function () {
         console.log("Am I working");
-        this.displayElement.innerHTML = "</br></br>Thank you for playing again! Please put your bet anc click GetHand";
+        this.displayElement.innerHTML = "</br></br>Thank you for playing again " + this.blackJackPlayer.getName() + "! Please put your bet and click GetHand";
         this.deck = new Deck();
+        this.playerHand = this.giveHand(this.playerHand);
+        this.userInputElement2.value = "";
         this.getBetButton.disabled = false;
-        this.giveDealerHand();
+        this.playAgainButton.disabled = true;
     };
     return BlackJack;
+}());
+var BlackJackGame = /** @class */ (function () {
+    function BlackJackGame() {
+        this.displayElement = document.getElementById("miniDisplay");
+        this.getBetButton = document.getElementById("getBet");
+    }
+    BlackJackGame.prototype.playAgain = function () {
+        console.log("Am I working");
+        var blackJack = new BlackJack();
+        this.displayElement.innerHTML = "Thank you for playing again ";
+        // this.blackJack.getUserResponse();
+        blackJack.setBetAmount();
+        blackJack.givePlayerHand();
+        blackJack.giveDealerHand();
+        blackJack.dealerHit();
+        blackJack.dealerHit();
+    };
+    return BlackJackGame;
 }());
 /// <reference path="Player.ts" />
 /// <reference path="Card.ts" />
@@ -587,9 +619,12 @@ var GoFishGame = /** @class */ (function () {
     };
     return GoFishGame;
 }());
+/// <reference path="BlackJackGame.ts" />
+/// <reference path="GoFish.ts" />
 /// <reference path="GoFishGame.ts" />
 var goFishGame = new GoFishGame();
 var goFish = new GoFish();
 var blackJack = new BlackJack();
 blackJack.startGame();
+var blackJackGame = new BlackJackGame();
 //# sourceMappingURL=app.js.map
