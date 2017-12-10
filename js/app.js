@@ -116,22 +116,67 @@ var Deck = /** @class */ (function () {
 var BlackJack = /** @class */ (function () {
     function BlackJack() {
         this.playerHand = [];
-        this.computerHand = [];
+        this.dealerHand = [];
         this.blackJackPlayer = new MoneyPlayer();
         this.deck = new Deck();
-        this.computerPlayer = new MoneyPlayer();
-        this.computerHand = [];
+        this.dealer = new MoneyPlayer();
+        this.dealerHand = [];
         this.playerHand = [];
-        this.getPlayerName = document.getElementById("getPlayerName");
+        this.getPlayerNameButton = document.getElementById("getPlayerName");
         this.getHandButton = document.getElementById("getHand");
-        this.displayElement = document.getElementById("display");
+        this.displayElement = document.getElementById("miniDisplay");
         this.userInputElement2 = document.getElementById("user_input2");
         this.userInputElement = document.getElementById("user_input");
+        this.hitButton = document.getElementById("hit");
+        this.standButton = document.getElementById("stand");
+        this.playAgainButton = document.getElementById("playAgain");
+        this.quitButton = document.getElementById("quit");
+        this.getBetButton = document.getElementById("getBet");
     }
+    BlackJack.prototype.startGame = function () {
+        this.getBetButton.disabled = true;
+        this.hitButton.disabled = true;
+        this.standButton.disabled = true;
+        this.quitButton.disabled = true;
+        this.playAgainButton.disabled = true;
+        this.getHandButton.disabled = true;
+    };
+    BlackJack.prototype.setPlayerName = function () {
+        var inputName = this.userInputElement.value;
+        if (inputName == "") {
+            return "Anonymous Player";
+        }
+        else {
+            return inputName;
+        }
+    };
     BlackJack.prototype.getUserResponse = function () {
-        this.blackJackPlayer.setName(this.userInputElement.value);
-        this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() + " Please click GetHand button to continue!";
-        this.getPlayerName.disabled = true;
+        this.blackJackPlayer.setName(this.setPlayerName());
+        this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() + "!." + " Please put your bet and click GetHand button to continue!";
+        this.getPlayerNameButton.disabled = true;
+        this.getBetButton.disabled = false;
+    };
+    BlackJack.prototype.setBetAmount = function () {
+        var betAmount = this.userInputElement2.value;
+        var totalBetAMount = 0;
+        totalBetAMount += betAmount;
+        var response = "";
+        if (isNaN(betAmount) || betAmount.toString() == "") {
+            this.displayElement.innerHTML += "</br> Please insert proper value";
+        }
+        else if (betAmount >= this.blackJackPlayer.getMoney()) {
+            this.displayElement.innerHTML += "</br></br>You dont have enough money. Please bet smaller amount.";
+        }
+        else if (totalBetAMount >= this.blackJackPlayer.getMoney()) {
+            this.quit();
+            this.displayElement.innerHTML += "</br></br>You finished your money.";
+            this.getBetButton.disabled = true;
+        }
+        else {
+            this.displayElement.innerHTML += "</br>Your bet is " + betAmount + ". Good Luck!";
+            this.getBetButton.disabled = true;
+        }
+        this.getHandButton.disabled = false;
     };
     BlackJack.prototype.giveHand = function (cards) {
         var i = 0;
@@ -146,38 +191,51 @@ var BlackJack = /** @class */ (function () {
         }
         return cards;
     };
-    BlackJack.prototype.giveComputerHand = function () {
-        this.giveHand(this.computerHand);
+    BlackJack.prototype.enableQuitAndPlayAGainButNotHitButtton = function () {
+        this.hitButton.disabled = true;
+        this.playAgainButton.disabled = false;
+        this.quitButton.disabled = false;
     };
     BlackJack.prototype.givePlayerHand = function () {
         this.playerHand = this.giveHand(this.playerHand);
         this.blackJackPlayer.setScore(this.playerHand[0].getValue() + this.playerHand[1].getValue());
+        var betAmount = parseInt(this.userInputElement2.value);
+        var prevAmount = this.blackJackPlayer.getMoney();
         if (this.blackJackPlayer.getscore() == 21) {
-            this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Yeah, you won!"
-                + "</br>  Do you want to play again? Pleas insert your reply and click the 'Play again' button. Put your bet amount and click bet";
+            this.blackJackPlayer.setMoney(prevAmount + betAmount);
+            this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your score is " + this.blackJackPlayer.getscore() + ". You won!"
+                + "</br> you have " + "$" + this.blackJackPlayer.getMoney() + "</br> To play again, click Play Again and also put your bet amount and click bet";
+            this.enableQuitAndPlayAGainButNotHitButtton();
         }
-        this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand";
-        console.log('before:', this.getHandButton.disabled);
-        this.getHandButton.disabled = true;
-        console.log('after:', this.getHandButton.disabled);
+        else {
+            this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total is " + this.blackJackPlayer.getscore() + ". Click Hit or stand";
+            this.getHandButton.disabled = true;
+        }
+        this.hitButton.disabled = false;
+        this.standButton.disabled = false;
     };
     BlackJack.prototype.playerHit = function () {
         if (this.deck.cards.length > 0) {
             var score = this.deck.cards[0].getValue();
-            console.log(score);
+            var betAmount = parseInt(this.userInputElement2.value);
+            var prevAmount = this.blackJackPlayer.getMoney();
             this.playerHand.push(this.deck.cards[0]);
             this.deck.cards.splice(0, 1);
             this.blackJackPlayer.setScore(this.blackJackPlayer.getscore() + score);
             if (this.blackJackPlayer.getscore() > 21) {
-                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". The computer won"
-                    + "</br>  click play again to play again or quit to leave the game";
+                this.blackJackPlayer.setMoney(prevAmount - betAmount);
+                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your score is  " + this.blackJackPlayer.getscore() + ". You Lost"
+                    + "</br> you have " + "$" + this.blackJackPlayer.getMoney() + "</br>click Play to play again or Quit to leave the game";
+                this.enableQuitAndPlayAGainButNotHitButtton();
             }
             else if (this.blackJackPlayer.getscore() == 21) {
-                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Yeah, you won!"
-                    + "</br> click play again to play again or quit to leave the game";
+                this.blackJackPlayer.setMoney(prevAmount + betAmount);
+                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your score is " + this.blackJackPlayer.getscore() + ". You WON!"
+                    + "</br> you have " + "$" + this.blackJackPlayer.getMoney() + "</br> To play again, click Play Again and also put your bet amount and click bet";
+                this.enableQuitAndPlayAGainButNotHitButtton();
             }
             else
-                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your total score is " + this.blackJackPlayer.getscore() + ". Do you want to hit or stay.";
+                this.displayElement.innerHTML += "</br>" + "your card is " + this.playerHand + ". Your  score is " + this.blackJackPlayer.getscore() + ". Do you want to hit or stay.";
         }
     };
     BlackJack.prototype.hitCheck = function (score) {
@@ -186,65 +244,84 @@ var BlackJack = /** @class */ (function () {
         }
         return false;
     };
-    BlackJack.prototype.computerScoreCheck = function (cards) {
-        if (this.computerPlayer.getscore() > 21) {
-            this.displayElement.innerHTML += " The computer is busted!";
+    BlackJack.prototype.dealerScoreCheck = function (cards) {
+        var betAmount = parseInt(this.userInputElement2.value);
+        var prevAmount = this.blackJackPlayer.getMoney();
+        if (this.dealer.getscore() > 21) {
+            this.blackJackPlayer.setMoney(prevAmount + betAmount);
+            this.displayElement.innerHTML += " The dealer score is " + this.dealer.getscore() + "</br> the dealer is busted!" +
+                " </br> you have " + "$" + this.blackJackPlayer.getMoney() + "</br>Click play again to play again or quit to leave the game";
+            this.enableQuitAndPlayAGainButNotHitButtton();
+            this.standButton.disabled = true;
         }
-        else if (this.computerPlayer.getscore() <= 21) {
-            this.displayElement.innerHTML += ". The computer stands.";
+        else if (this.dealer.getscore() <= 21) {
             this.standResult();
-            console.log(this.blackJackPlayer.getscore() + "hmmm");
+            this.enableQuitAndPlayAGainButNotHitButtton();
+            this.standButton.disabled = true;
         }
     };
     BlackJack.prototype.standResult = function () {
-        var betValue = this.userInputElement2.value;
-        var comScore = this.computerPlayer.getscore();
+        var betAmount = parseInt(this.userInputElement2.value);
+        var prevAmount = this.blackJackPlayer.getMoney();
         var pScore = this.blackJackPlayer.getscore();
-        if (comScore > pScore || comScore == 21) {
-            var playerMoney = this.blackJackPlayer.getMoney();
-            playerMoney -= parseInt(betValue);
-            this.blackJackPlayer.setMoney(playerMoney);
-            this.displayElement.innerHTML += ". Yeah You WON!. You have " + this.blackJackPlayer.getMoney();
-            this.displayElement.innerHTML += ". You lost!";
+        if (this.dealer.getscore() == 21 || this.dealer.getscore() > pScore) {
+            console.log(this.dealer.getscore() + " " + pScore + " " + this.blackJackPlayer.getMoney());
+            this.blackJackPlayer.setMoney(prevAmount - betAmount);
+            console.log(this.dealer.getscore() + " " + pScore + " " + this.blackJackPlayer.getMoney());
+            this.displayElement.innerHTML += ".The dealer score is " + this.dealer.getscore() + ". You Lost!. </br>You have " + "$" + this.blackJackPlayer.getMoney()
+                + ".</br> Click play again to play again or quit to leave the game";
+            this.enableQuitAndPlayAGainButNotHitButtton();
         }
-        else if (comScore < pScore) {
-            var playerMoney = this.blackJackPlayer.getMoney();
-            playerMoney += parseInt(betValue);
-            this.blackJackPlayer.setMoney(playerMoney);
-            this.displayElement.innerHTML += ". Yeah You WON!. You have " + this.blackJackPlayer.getMoney();
+        else if (this.dealer.getscore() < pScore) {
+            console.log(this.dealer.getscore() + " " + pScore + " " + this.blackJackPlayer.getMoney());
+            this.blackJackPlayer.setMoney(prevAmount + betAmount);
+            console.log(this.dealer.getscore() + " " + pScore + " " + this.blackJackPlayer.getMoney());
+            this.displayElement.innerHTML += ".The dealer score is " + this.dealer.getscore() + ".</br> Yeah You WON!. You have " + "$" + this.blackJackPlayer.getMoney();
+            ".</br> Click play again to play again or quit to leave the game";
+            this.enableQuitAndPlayAGainButNotHitButtton();
         }
         else {
-            this.displayElement.innerHTML += ". wow its a tie";
+            console.log(this.dealer.getscore());
+            this.displayElement.innerHTML += ".The dealer score is " + this.dealer.getscore() + ". Wow its a tie"
+                + ".</br> Click play again to play again or quit to leave the game";
+            this.enableQuitAndPlayAGainButNotHitButtton();
         }
     };
-    BlackJack.prototype.computerHit = function () {
-        this.giveComputerHand();
-        var computerScore = this.computerHand[0].getValue() + this.computerHand[1].getValue();
-        if (computerScore >= 17 && computerScore <= 21) {
-            this.computerScoreCheck(this.computerHand);
-        }
-        while (this.hitCheck(computerScore)) {
-            var score = this.deck.cards[0].getValue();
-            console.log(score);
-            this.computerHand.push(this.deck.cards[0]);
-            this.deck.cards.splice(0, 1);
-            this.computerPlayer.setScore(this.computerPlayer.getscore() + score);
-            computerScore = this.computerPlayer.getscore();
-        }
-        this.displayElement.innerHTML += "</br> The computer hits " + this.computerHand + ". Computer  score is " + computerScore;
-        this.computerScoreCheck(this.computerHand);
+    BlackJack.prototype.giveDealerHand = function () {
+        this.dealerHand = this.giveHand(this.dealerHand);
     };
-    BlackJack.prototype.playAgain = function () {
-        this.deck = new Deck();
-        this.givePlayerHand();
-        this.giveComputerHand();
-        //this.getUserResponse.disabled = false;
+    BlackJack.prototype.dealerHit = function () {
+        this.giveDealerHand();
+        console.log(this.dealerHand[0].getValue() + this.dealerHand[1].getValue());
+        var dealerScore = this.dealerHand[0].getValue() + this.dealerHand[1].getValue();
+        this.dealer.setScore(dealerScore);
+        console.log(this.dealer.getscore());
+        this.displayElement.innerHTML += "</br> The dealer hits ";
+        if (dealerScore > 17) {
+            this.dealerScoreCheck(this.dealerHand);
+        }
+        else {
+            while (this.hitCheck(dealerScore)) {
+                var score = this.deck.cards[0].getValue();
+                console.log(score);
+                this.dealerHand.push(this.deck.cards[0]);
+                this.deck.cards.splice(0, 1);
+                this.dealer.setScore(this.dealer.getscore() + score);
+                dealerScore = this.dealer.getscore();
+            }
+            this.dealerScoreCheck(this.dealerHand);
+        }
     };
     BlackJack.prototype.quit = function () {
-        console.log("am I working");
         this.displayElement.innerHTML = "</br></br>Thank you! It was nice playing with you, lets do it again sometime soon. Bye bye!";
+        this.playAgainButton.disabled = true;
     };
-    BlackJack.prototype.clean = function () {
+    BlackJack.prototype.playAgain = function () {
+        console.log("Am I working");
+        this.displayElement.innerHTML = "</br></br>Thank you for playing again! Please put your bet anc click GetHand";
+        this.deck = new Deck();
+        this.getBetButton.disabled = false;
+        this.giveDealerHand();
     };
     return BlackJack;
 }());
@@ -514,4 +591,5 @@ var GoFishGame = /** @class */ (function () {
 var goFishGame = new GoFishGame();
 var goFish = new GoFish();
 var blackJack = new BlackJack();
+blackJack.startGame();
 //# sourceMappingURL=app.js.map
