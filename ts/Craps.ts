@@ -17,14 +17,15 @@ constructor(){
     this.userInputElement= document.getElementById("user_input");}
 
 firstRoll(){
-let diceRollTotal = dice.rollDice(2); 
+let diceRollTotal = 7//dice.rollDice(2); 
    
 switch (diceRollTotal) {
 case 7:
 case 11:
-this.gameMessage = "You rolled a: " + diceRollTotal + "! You win!";
+//crapscash.addPlyrWinnings();
+this.gameMessage = "You rolled a: " + diceRollTotal + "! You win!";// + crapscash.addPlyrWinnings() ;
 this.gameStatus = 1;
-// addWinnings();
+
 break;
 case 2:
 case 3:
@@ -63,6 +64,7 @@ console.log("shooter" + shooter)
 switch (shooter) {
 case this.shooter = this.setPlayerPoint():
 this.gameMessage = "You win!(2nd roll?)";
+
 break;
 case 7:
 //case 11:

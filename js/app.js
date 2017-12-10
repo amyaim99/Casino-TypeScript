@@ -53,13 +53,13 @@ var Craps = /** @class */ (function () {
         this.userInputElement = document.getElementById("user_input");
     }
     Craps.prototype.firstRoll = function () {
-        var diceRollTotal = dice.rollDice(2);
+        var diceRollTotal = 7; //dice.rollDice(2); 
         switch (diceRollTotal) {
             case 7:
             case 11:
-                this.gameMessage = "You rolled a: " + diceRollTotal + "! You win!";
+                //crapscash.addPlyrWinnings();
+                this.gameMessage = "You rolled a: " + diceRollTotal + "! You win!"; // + crapscash.addPlyrWinnings() ;
                 this.gameStatus = 1;
-                // addWinnings();
                 break;
             case 2:
             case 3:
@@ -433,33 +433,51 @@ var GoFishGame = /** @class */ (function () {
 }());
 var CrapsCash = /** @class */ (function () {
     function CrapsCash() {
-        this.takePlyrBet = function () {
-            this.getPlyrCashAvail -= setPlyrBet();
-        };
+        this.plrBetInput = document.getElementById("plyrBet");
+        this.plrBetInputDisplay = document.getElementById("display");
         this.displayElement = document.getElementById("display");
-        this.userInputElement = document.getElementById("user_input");
+        this.userInputElement = document.getElementById("plyrCashToTable");
     }
-    CrapsCash.prototype.setPlrCash = function (playerINPUT) {
-        var response = this.userInputElement.value;
-        var playerCash = "player input";
-        return playerCash;
+    CrapsCash.prototype.setPlrCash = function () {
+        var playerCashOnTable = this.userInputElement.value;
+        this.betMessage = "You have made " + playerCashOnTable + " available for betting. How much would you like to bet?";
+        var playerCash = playerCashOnTable;
+        console.log("player cash:" + playerCash);
+        return this.betMessage;
     };
-    CrapsCash.prototype.plyrCashAvail = function () {
-        var getPlyrCashAvail = this.setPlrCash;
+    CrapsCash.prototype.plyrCashToTable = function () {
+        this.displayElement.innerHTML += this.setPlrCash();
+    };
+    CrapsCash.prototype.setPlyrCashAvail = function () {
+        var getPlyrCashAvail = this.setPlrCashAvail;
         return getPlyrCashAvail;
     };
-    CrapsCash.prototype.setPlyrBet = function (inputfrompler) {
-        this.betMessage = "";
-        if (inputfrompler <= this.plyrCashAvail) {
+    CrapsCash.prototype.setPlyrBet = function () {
+        var betAmount = this.plrBetInput.value;
+        if (betAmount <= this.setPlyrCashAvail) {
+            this.betMessage = "You have made a bet of" + betAmount + ". Please take your first roll";
         }
-        else if () {
+        else {
+            this.betMessage = "You have place a bet larger than your available cash. Please wager a smaller amount.";
         }
+        console.log("player bet:" + this.getPlyrCashAvail);
+        return this.betMessage;
+    };
+    CrapsCash.prototype.currentPlyrBet = function () {
+        this.plrBetInputDisplay.innerHTML += this.setPlyrBet();
     };
     CrapsCash.prototype.addPlyrWinnings = function () {
         //add setPlyrBet to plyrCashAvail
+        console.log("getPlyrCashAvail: " + this.getPlyrCashAvail);
+        this.getPlyrCashAvail += this.betAmount;
+        this.betMessage = "You won." + this.betAmount + "has been added to your total. You now have:" + this.getPlyrCashAvail + ". Would you like to play again?";
+        return this.betMessage;
     };
     CrapsCash.prototype.minusPlyrLoss = function () {
         //minus setPlyrBet to plyrCashAvail
+        this.getPlyrCashAvail -= this.betAmount;
+        this.betMessage = "You lost." + this.betAmount + "has been deducted from your total. You now have:" + this.getPlyrCashAvail + ". Would you like to play again?";
+        return this.betMessage;
     };
     return CrapsCash;
 }());
@@ -471,6 +489,7 @@ var CrapsCash = /** @class */ (function () {
 // aliceBob.init();
 var dice = new Dice();
 var craps = new Craps();
+var crapscash = new CrapsCash();
 //drt.rollDice();
 //document.getElementById("display").innerHTML+="string";
 //var diceRollTotal = drt.rollDice(2);
