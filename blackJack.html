@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link href="./css/style.css" type="text/css" rel="stylesheet">
+    <title>TypeScript Casino | Zipcode Wilmington</title>
+</head>
+<body>
+    <header class="main-header group">
+        <div class="title"></div>
+        <div class="lesson-link"><img src="./images/logos/blackjack.jpg" alt="Casino"/></div>
+        <div class="zip-link"><img src="./images/logos/zip_logo.jpg" alt="Zipcode Wilmington"/></div>
+    </header>
+
+    <h1>Casino</h1>
+    
+
+    <section id="main"  >
+       
+        <div id="display"  >
+            <font size="8" color="red">Welcome to BlackJack </font></br>
+            <font size="4" color="green">Please insert the name you want to use for the game</font></br>
+            <img src="./images/logos/blackjack.jpg" alt="BlackJack" style="width:600px;height:150px;">  
+            <div id="miniDisplay"> </div>
+        </div>
+        
+			<div id="input">
+                    <div id="input">
+                            <input type="text" name="user_input" id="user_input">
+                            <button onclick="blackJack.getUserResponse()" id="getPlayerName">Get Name</button>
+                        </div> 
+                        <div id="input">
+                                <input type="text" name="user_input" id="user_input2">
+                                <button onclick="blackJack.setBetAmount()" id="getBet"> Bet Amount</button>
+                            </div> 
+                    </br>  
+                        
+                    <div>
+                        </div> 
+                            <button  onclick="blackJack.givePlayerHand()" id="getHand">Get Hand </button>
+                            <button onclick="blackJack.playerHit()" id="hit">  Hit</button>
+                            <button onclick="blackJack.dealerHit()" id="stand"> Stand </button>
+                            <button onclick="blackJack.playAgain()" id="playAgain">Play Again</button>
+                            <!-- <button href="blackJack2.html" >Play Again</button> -->
+                            <button onclick="blackJack.quit()" id="quit">Quit</button>
+                        </div> 
+                    </br>     
+            </div>
+            <a href="index.html" class="button2">Home Page</a>
+    </section>
+
+
+ 	<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>

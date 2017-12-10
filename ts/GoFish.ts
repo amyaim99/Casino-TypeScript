@@ -14,6 +14,7 @@ private playerHand: Card[]=[]
 private computerHand: Card[]=[]
 private displayElement:any
 private  userInputElement: any 
+private  userInputElement2: any 
 
 constructor(){
     this.goFishPlayer = new Player()
@@ -22,6 +23,7 @@ constructor(){
     this.computerHand = []
     this.playerHand =[]
     this.displayElement = document.getElementById("display");
+    this.userInputElement2= document.getElementById("user_input2");
     this.userInputElement= document.getElementById("user_input");
 
 }
@@ -60,41 +62,27 @@ givePlayerHand():string{
     this.giveHand(this.playerHand);
     this.giveComputerHand()
     let element = document.getElementById("display")
+    console.log(this.deck.cards.length)
     return element.innerHTML += "</br>" + "your card is " + this.playerHand +". Click GetCard to continue"    
 }
 
-checkPlayersCardRequestForGameRule(input: string):Boolean {
-    this.givePlayerHand()
-    console.log("Am I working")
-   input= this.userInputElement.value
-   let checkresult:Boolean = false;
-    //let element = document.getElementById("display")
-    for (let i = 0; i < this.playerHand.length; i++) {
-
-        if (input.toUpperCase()== this.playerHand[i].rank) {
-            checkresult = true;
-           // checkresult = "</br>" + element.innerHTML +" " + this.askComputerHandForACArd(input);
-            break;
-
-        } 
+checkCardExistance(cards:Card[], rank:string):Boolean{
+    let checkOutcome: Boolean = false;
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].rank== rank) checkOutcome = true;
     }
-            checkresult = false;
-            //console.log("the input is not correct")
-           // checkresult =  checkresult = "</br>" + element.innerHTML +" " + "insert proper value";
-            //input= this.userInputElement.value
-        
-    
-        console.log(checkresult)
-        console.log(this.playerHand)
-    return checkresult;
+    return checkOutcome;
+}
+
+checkComputerHandForPlayerRequestCard(rank:string){
+    this.giveComputerHand()
+    return  this.checkCardExistance(this.computerHand, rank)
 }
 
 askComputerHandForACArd(cardRank:string){
-
-    cardRank = this.userInputElement.value
-    let cards: Card[]= []
-    let card:Card 
-    console.log(this.checkComputerHandForPlayerRequestCard(cardRank))
+this.giveComputerHand()
+this.givePlayerHand()
+cardRank= this.userInputElement2.value
     if(this.checkComputerHandForPlayerRequestCard){
 
         for(let i =0; i<this.computerHand.length; i++){
@@ -107,14 +95,18 @@ askComputerHandForACArd(cardRank:string){
                 }
             }
         }
-}
+        return this.displayElement.innerHTML += "</br>" + "The computer has " + cardRank+ ". Your card is " + this.playerHand +". Click GetCard to continue"
+        
+} else 
+    this.goFishingPlayer()
 
 // let element = document.getElementById("display")
-//  return element.innerHTML += "</br>" + "your card is " + this.playerHand +". Click GetCard to continue"
+return this.displayElement.innerHTML += "</br>" + "the computer doesnt have your card. GoFishing. Your card is " + this.playerHand +". Click GetCard to continue"
 }
 
 
 getMaximimRepeatingCard(cards:Card[]):string{
+   
 if(cards.length == 0){
     return null;
     }
@@ -145,21 +137,7 @@ computerCardToRequest(): string {
     return this.getMaximimRepeatingCard(this.computerHand)
 } 
 
-checkCardExistance(cards:Card[], rank:string):Boolean{
-    let checkOutcome: Boolean = false;
-    for (let i = 0; i < cards.length; i++) {
-        if (cards[i].rank== rank) checkOutcome = true;
-    }
-    return checkOutcome;
-}
 
-checkComputerHandForPlayerRequestCard(rank:string){
-    rank = this.userInputElement.value
-    this.giveComputerHand()
-    console.log(this.checkCardExistance(this.computerHand, rank))
-    console.log(this.computerHand)
-    return  this.checkCardExistance(this.computerHand, rank)
-}
 
 
 checkPlayerHasRequestedCardRank(rank: string):Boolean {
@@ -223,6 +201,32 @@ goFishingPlayer() {
     console.log("The deck is empty. Game over")    
             
     } 
+
+    // checkPlayersCardRequestForGameRule(input: string):Boolean {
+    //     this.givePlayerHand()
+    //     console.log("Am I working")
+    //    input= this.userInputElement.value
+    //    let checkresult:Boolean = false;
+    //     //let element = document.getElementById("display")
+    //     for (let i = 0; i < this.playerHand.length; i++) {
+    
+    //         if (input == this.playerHand[i].rank) {
+    //             checkresult = true;
+    //            // checkresult = "</br>" + element.innerHTML +" " + this.askComputerHandForACArd(input);
+    //             break;
+    
+    //         } 
+    //     }
+    //             checkresult = false;
+    //             //console.log("the input is not correct")
+    //            // checkresult =  checkresult = "</br>" + element.innerHTML +" " + "insert proper value";
+    //             //input= this.userInputElement.value
+            
+        
+    //         console.log(checkresult)
+    //         console.log(this.playerHand)
+    //     return checkresult;
+    // }
 
 countBooksInHand(cards:Card[]):string {
          
