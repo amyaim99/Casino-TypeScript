@@ -105,12 +105,6 @@ class BlackJack{
             return cards;
         }
 
-    enableQuitAndPlayAGainButNotHitButtton(){
-        this.hitButton.disabled = true;
-        this.standButton.disabled = true;
-        this.playAgainButton.disabled = false;
-        this.quitButton.disabled = false;
-    }
     
     givePlayerHand(){
         this.playerHand= this.giveHand(this.playerHand);
@@ -129,7 +123,13 @@ class BlackJack{
         this.standButton.disabled = false;
     }
     }
-   
+    enableQuitAndPlayAGainButNotHitButtton(){
+        this.hitButton.disabled = true;
+        this.standButton.disabled = true;
+        this.playAgainButton.disabled = false;
+        this.quitButton.disabled = false;
+    }
+    
    playerHit() {
        if (this.deck.cards.length>0){
         let score:number = this.deck.cards[0].getValue()
@@ -162,7 +162,33 @@ class BlackJack{
         }
         return false;
     }
+    giveDealerHand(){
+        this.dealerHand = this.giveHand(this.dealerHand);
+        }
 
+    dealerHit( ){
+        this.giveDealerHand();
+        console.log(this.dealerHand[0].getValue() + this.dealerHand[1].getValue())
+        let dealerScore:number = this.dealerHand[0].getValue() + this.dealerHand[1].getValue();
+        this.dealer.setScore(dealerScore)
+        console.log(this.dealer.getscore())
+        this.displayElement.innerHTML += "</br> The dealer hits "
+            if(dealerScore>17 ){
+                this.dealerScoreCheck(this.dealerHand)
+                }
+            else{
+                while(this.hitCheck(dealerScore))
+                {
+                    let score:number = this.deck.cards[0].getValue()
+                    console.log(score)
+                    this.dealerHand.push(this.deck.cards[0])
+                    this.deck.cards.splice(0, 1);
+                    this.dealer.setScore(this.dealer.getscore()+ score)
+                    dealerScore = this.dealer.getscore()
+                } 
+                this.dealerScoreCheck(this.dealerHand)
+                }
+    }
     dealerScoreCheck(cards:Card[]){
         let betAmount: number = parseInt(this.userInputElement2.value);
         let prevAmount: number = this.blackJackPlayer.getMoney();
@@ -209,49 +235,27 @@ class BlackJack{
             }
         }
     
-    giveDealerHand(){
-        this.dealerHand = this.giveHand(this.dealerHand);
-        }
-
-    dealerHit( ){
-        this.giveDealerHand();
-        console.log(this.dealerHand[0].getValue() + this.dealerHand[1].getValue())
-        let dealerScore:number = this.dealerHand[0].getValue() + this.dealerHand[1].getValue();
-        this.dealer.setScore(dealerScore)
-        console.log(this.dealer.getscore())
-        this.displayElement.innerHTML += "</br> The dealer hits "
-            if(dealerScore>17 ){
-                this.dealerScoreCheck(this.dealerHand)
-                }
-            else{
-                while(this.hitCheck(dealerScore))
-                {
-                    let score:number = this.deck.cards[0].getValue()
-                    console.log(score)
-                    this.dealerHand.push(this.deck.cards[0])
-                    this.deck.cards.splice(0, 1);
-                    this.dealer.setScore(this.dealer.getscore()+ score)
-                    dealerScore = this.dealer.getscore()
-                } 
-                this.dealerScoreCheck(this.dealerHand)
-                }
-    }
+    
 
     quit(){
         this.displayElement.innerHTML = "</br>Thank you " + this.blackJackPlayer.getName()+"! It was nice playing with you, lets do it again sometime soon. Bye bye!";
         this.playAgainButton.disabled = true;
         this.getPlayerNameButton.disabled = false;
         this.userInputElement2.value ="";
+        this.startGame();
         this.totalBetAMount =0;
         this.blackJackPlayer.setMoney(500);
-        console.log(this.blackJackPlayer.getMoney())
+        this.deck = new Deck();
+        this.playerHand =[]
+        this.dealerHand=[]
     } 
     
     playAgain(){
         console.log("Am I working")
-        this.displayElement.innerHTML = "</br></br>Thank you for playing again " + this.blackJackPlayer.getName() + "! Please put your bet and click GetHand";
+        this.displayElement.innerHTML = "</br>Thank you for playing again " + this.blackJackPlayer.getName() + "! Please put your bet and click GetHand";
         this.deck = new Deck();
-        this.playerHand= this.giveHand(this.playerHand);
+        this.playerHand =[]
+        this.dealerHand=[]
         this.userInputElement2.value ="";
         this.getBetButton.disabled = false;
         this.playAgainButton.disabled= true;

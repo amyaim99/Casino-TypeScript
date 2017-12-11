@@ -197,12 +197,6 @@ var BlackJack = /** @class */ (function () {
         }
         return cards;
     };
-    BlackJack.prototype.enableQuitAndPlayAGainButNotHitButtton = function () {
-        this.hitButton.disabled = true;
-        this.standButton.disabled = true;
-        this.playAgainButton.disabled = false;
-        this.quitButton.disabled = false;
-    };
     BlackJack.prototype.givePlayerHand = function () {
         this.playerHand = this.giveHand(this.playerHand);
         this.blackJackPlayer.setScore(this.playerHand[0].getValue() + this.playerHand[1].getValue());
@@ -220,6 +214,12 @@ var BlackJack = /** @class */ (function () {
             this.hitButton.disabled = false;
             this.standButton.disabled = false;
         }
+    };
+    BlackJack.prototype.enableQuitAndPlayAGainButNotHitButtton = function () {
+        this.hitButton.disabled = true;
+        this.standButton.disabled = true;
+        this.playAgainButton.disabled = false;
+        this.quitButton.disabled = false;
     };
     BlackJack.prototype.playerHit = function () {
         if (this.deck.cards.length > 0) {
@@ -250,6 +250,31 @@ var BlackJack = /** @class */ (function () {
             return true;
         }
         return false;
+    };
+    BlackJack.prototype.giveDealerHand = function () {
+        this.dealerHand = this.giveHand(this.dealerHand);
+    };
+    BlackJack.prototype.dealerHit = function () {
+        this.giveDealerHand();
+        console.log(this.dealerHand[0].getValue() + this.dealerHand[1].getValue());
+        var dealerScore = this.dealerHand[0].getValue() + this.dealerHand[1].getValue();
+        this.dealer.setScore(dealerScore);
+        console.log(this.dealer.getscore());
+        this.displayElement.innerHTML += "</br> The dealer hits ";
+        if (dealerScore > 17) {
+            this.dealerScoreCheck(this.dealerHand);
+        }
+        else {
+            while (this.hitCheck(dealerScore)) {
+                var score = this.deck.cards[0].getValue();
+                console.log(score);
+                this.dealerHand.push(this.deck.cards[0]);
+                this.deck.cards.splice(0, 1);
+                this.dealer.setScore(this.dealer.getscore() + score);
+                dealerScore = this.dealer.getscore();
+            }
+            this.dealerScoreCheck(this.dealerHand);
+        }
     };
     BlackJack.prototype.dealerScoreCheck = function (cards) {
         var betAmount = parseInt(this.userInputElement2.value);
@@ -294,69 +319,90 @@ var BlackJack = /** @class */ (function () {
             this.enableQuitAndPlayAGainButNotHitButtton();
         }
     };
-    BlackJack.prototype.giveDealerHand = function () {
-        this.dealerHand = this.giveHand(this.dealerHand);
-    };
-    BlackJack.prototype.dealerHit = function () {
-        this.giveDealerHand();
-        console.log(this.dealerHand[0].getValue() + this.dealerHand[1].getValue());
-        var dealerScore = this.dealerHand[0].getValue() + this.dealerHand[1].getValue();
-        this.dealer.setScore(dealerScore);
-        console.log(this.dealer.getscore());
-        this.displayElement.innerHTML += "</br> The dealer hits ";
-        if (dealerScore > 17) {
-            this.dealerScoreCheck(this.dealerHand);
-        }
-        else {
-            while (this.hitCheck(dealerScore)) {
-                var score = this.deck.cards[0].getValue();
-                console.log(score);
-                this.dealerHand.push(this.deck.cards[0]);
-                this.deck.cards.splice(0, 1);
-                this.dealer.setScore(this.dealer.getscore() + score);
-                dealerScore = this.dealer.getscore();
-            }
-            this.dealerScoreCheck(this.dealerHand);
-        }
-    };
     BlackJack.prototype.quit = function () {
         this.displayElement.innerHTML = "</br>Thank you " + this.blackJackPlayer.getName() + "! It was nice playing with you, lets do it again sometime soon. Bye bye!";
         this.playAgainButton.disabled = true;
         this.getPlayerNameButton.disabled = false;
         this.userInputElement2.value = "";
+        this.startGame();
         this.totalBetAMount = 0;
         this.blackJackPlayer.setMoney(500);
-        console.log(this.blackJackPlayer.getMoney());
+        this.deck = new Deck();
+        this.playerHand = [];
+        this.dealerHand = [];
     };
     BlackJack.prototype.playAgain = function () {
         console.log("Am I working");
-        this.displayElement.innerHTML = "</br></br>Thank you for playing again " + this.blackJackPlayer.getName() + "! Please put your bet and click GetHand";
+        this.displayElement.innerHTML = "</br>Thank you for playing again " + this.blackJackPlayer.getName() + "! Please put your bet and click GetHand";
         this.deck = new Deck();
-        this.playerHand = this.giveHand(this.playerHand);
+        this.playerHand = [];
+        this.dealerHand = [];
         this.userInputElement2.value = "";
         this.getBetButton.disabled = false;
         this.playAgainButton.disabled = true;
     };
     return BlackJack;
 }());
-var BlackJackGame = /** @class */ (function () {
-    function BlackJackGame() {
-        this.displayElement = document.getElementById("miniDisplay");
-        this.getBetButton = document.getElementById("getBet");
-    }
-    BlackJackGame.prototype.playAgain = function () {
-        console.log("Am I working");
-        var blackJack = new BlackJack();
-        this.displayElement.innerHTML = "Thank you for playing again ";
-        // this.blackJack.getUserResponse();
-        blackJack.setBetAmount();
-        blackJack.givePlayerHand();
-        blackJack.giveDealerHand();
-        blackJack.dealerHit();
-        blackJack.dealerHit();
-    };
-    return BlackJackGame;
-}());
+// class BlackJackConsole{
+//    private displayElement:any;
+//    private getBetButton: any;
+//    private userInput:any
+//    private blackJack: BlackJack
+//    private blackJackPlayer: MoneyPlayer
+//    private userInputElement: any; 
+//    private userInputElement2: any; 
+//    private getHandButton: any;
+//    private hitButton:any;
+//    private standButton:any;
+//    private playAgainButton:any;
+//    private quitButton:any;
+//    private getPlayerNameButton:any;
+//    constructor(){
+//      this.blackJack = new BlackJack()
+//      this.blackJackPlayer = new MoneyPlayer()
+//      this.getPlayerNameButton = document.getElementById("getPlayerName");
+//      this.getHandButton = document.getElementById("getHand");
+//      this.displayElement = document.getElementById("miniDisplay");
+//      this.userInputElement2= document.getElementById("user_input2");
+//      this.userInputElement= document.getElementById("user_input");
+//      this.hitButton= document.getElementById("hit");
+//      this.standButton= document.getElementById("stand");
+//      this.playAgainButton= document.getElementById("playAgain");
+//      this.quitButton= document.getElementById("quit");
+//      this.getBetButton= document.getElementById("getBet");
+//    }
+//    startGame(){
+//     this.getBetButton.disabled = true;
+//     this.hitButton.disabled = true;
+//     this.standButton.disabled = true;
+//     this.quitButton.disabled = true;
+//     this.playAgainButton.disabled= true;
+//     this.getHandButton.disabled = true;
+// }
+//    getUserResponse () {
+//     this.displayElement.innerHTML =""
+//     this.blackJackPlayer.setName(blackJack.setPlayerName()); 
+//     this.displayElement.innerHTML += "Welcome, " + this.blackJackPlayer.getName() +"!." + " Please put your bet and click GetHand button to continue!"
+//     this.getPlayerNameButton.disabled = true;
+//     this.getBetButton.disabled = false;
+//     this.userInputElement.value="";
+// }
+// playGame(){
+//   this.displayElement.innerHTML += blackJack.setBetAmount()
+//   this.userInputElement2.value="";
+// }
+//    playAgain(){
+//     console.log("Am I working")
+//     let blackJack: BlackJack = new BlackJack();
+//     this.displayElement.innerHTML ="Thank you for playing again " 
+//    blackJack.getUserResponse();
+//    blackJack.setBetAmount();
+//    blackJack.givePlayerHand();
+//     blackJack.giveDealerHand();
+//     blackJack.dealerHit();
+//     blackJack.dealerHit();
+// }
+// } 
 /// <reference path="Player.ts" />
 /// <reference path="Card.ts" />
 /// <reference path="Deck.ts" />
@@ -619,12 +665,12 @@ var GoFishGame = /** @class */ (function () {
     };
     return GoFishGame;
 }());
-/// <reference path="BlackJackGame.ts" />
+/// <reference path="BlackJackConsole.ts" />
 /// <reference path="GoFish.ts" />
 /// <reference path="GoFishGame.ts" />
 var goFishGame = new GoFishGame();
 var goFish = new GoFish();
 var blackJack = new BlackJack();
+//let blackJackConsole = new BlackJackConsole()
 blackJack.startGame();
-var blackJackGame = new BlackJackGame();
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=app1.js.map
