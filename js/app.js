@@ -594,10 +594,11 @@ var Dice = /** @class */ (function () {
     }
     //Dice made to be dynamic to adapt to dice needed per game.
     Dice.prototype.rollDice = function (diceNeeded) {
+        //correct dice to be random between diceNeeded & diceNeeded * 6
         var diceTotal = 0;
         var die;
         for (var i = 0; i < diceNeeded; i++) {
-            die = (Math.random() * 6);
+            die = (Math.floor(Math.random() * 6) + 1);
             diceTotal += die;
         }
         return Math.round(diceTotal);
@@ -613,8 +614,8 @@ var Craps = /** @class */ (function () {
         this.nextRoll = function () {
             console.log("point" + this.setPlayerPoint());
             //this.shooter = 0; Need to reset shooter to 0 after each roll
-            var shooter = dice.rollDice(2);
-            console.log("shooter" + shooter);
+            var shooter = 2; //dice.rollDice(2);
+            console.log("Current Dice Roll: " + shooter);
             //add payout to bank
             switch (shooter) {
                 case this.shooter = this.setPlayerPoint():
@@ -628,7 +629,7 @@ var Craps = /** @class */ (function () {
                     this.gameStatus = 2;
                     break;
                 case 2:
-                    this.gameMessage = +"You rolled a: " + shooter + crapscash.addPlyrWinnings();
+                    this.gameMessage = "You rolled a: " + shooter + crapscash.addPlyrWinnings();
                     // addWinnings();
                     this.gameStatus = 1;
                     break;
@@ -689,30 +690,30 @@ var CrapsCash = /** @class */ (function () {
     }
     //setPlrCashAvail : number;
     CrapsCash.prototype.setPlrCash = function () {
-        this.playerCashOnTable = this.userInputElement.value;
-        if (this.userInputElement.value == null) {
-            this.betMessage = "</br> Please insert proper value";
+        if (isNaN(this.userInputElement.value) || this.userInputElement.value == "") {
+            this.betMessage = "Please enter an amount to bring to the table.</br>";
         }
         else {
+            this.playerCashOnTable = +(this.userInputElement.value);
             this.betMessage = "You have made " + this.playerCashOnTable + " available for betting. How much would you like to bet?";
+            this.playerCash = this.playerCashOnTable;
+            //this.setPlyrCashAvail();
+            console.log("player cash:" + this.playerCash);
         }
-        this.playerCash = this.playerCashOnTable;
-        //this.setPlyrCashAvail();
-        console.log("player cash:" + this.playerCash);
         return this.betMessage;
     };
     CrapsCash.prototype.plyrCashToTable = function () {
         this.displayElement.innerHTML += this.setPlrCash();
     };
     CrapsCash.prototype.setPlyrBet = function () {
-        this.betAmount = this.plrBetInput.value;
+        this.betAmount = +(this.plrBetInput.value);
         console.log("Bet Amount:" + this.betAmount);
-        if (isNaN(this.plrBetInput.value) || this.betAmount.toString() == "") {
-            this.plrBetInputDisplay.innerHTML += "</br> Please insert proper value";
+        if (isNaN(this.plrBetInput.value) || this.plrBetInput.value == "") {
+            this.betMessage = "Please enter an amount to bring to the table.</br>";
         }
         else {
             if (this.betAmount <= this.playerCash) {
-                this.betMessage = "You have made a bet of" + this.betAmount + ". Please take your first roll";
+                this.betMessage = "You have made a bet of $" + this.betAmount + ". Please take your first roll";
             }
             else {
                 this.betMessage = "You have place a bet larger than your available cash. Please wager a smaller amount.";
@@ -728,15 +729,17 @@ var CrapsCash = /** @class */ (function () {
         //add setPlyrBet to plyrCashAvail
         this.getPlyrCashAvail = this.playerCash + this.betAmount;
         console.log("Player cash after win" + this.getPlyrCashAvail);
-        this.betMessage = "You won. " + this.betAmount + " has been added to your total. You now have: " + this.getPlyrCashAvail + ". Would you like to play again?";
+        this.betMessage = "You won. $" + this.betAmount + " has been added to your total. You now have: $" + this.getPlyrCashAvail + ". Would you like to play again?";
         //console.log("getPlyrCashAvail: " + this.getPlyrCashAvail);
         return "</br>" + this.betMessage;
     };
     CrapsCash.prototype.minusPlyrLoss = function () {
         //minus setPlyrBet to plyrCashAvail
-        this.getPlyrCashAvail = this.playerCash - this.betAmount;
+        this.playerCash = this.playerCash - this.betAmount;
         console.log("Player cash after loss" + this.getPlyrCashAvail);
-        this.betMessage = "You lost." + this.betAmount + "has been deducted from your total. You now have:" + this.getPlyrCashAvail + ". Would you like to play again?";
+        this.betMessage = "You lost. $" + this.betAmount + " has been deducted from your total. You now have: $" + this.playerCash + ". Would you like to play again?";
+        console.log("Cash Avail after loss: " + this.playerCash);
+        var playerCash = this.playerCash;
         return "</br>" + this.betMessage;
     };
     return CrapsCash;
@@ -752,4 +755,9 @@ var goFish = new GoFish();
 var dice = new Dice();
 var craps = new Craps();
 var crapscash = new CrapsCash();
+var CrapsNewRound = /** @class */ (function () {
+    function CrapsNewRound() {
+    }
+    return CrapsNewRound;
+}());
 //# sourceMappingURL=app.js.map

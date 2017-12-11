@@ -54,8 +54,8 @@ getPlayerPoint(){}
 nextRoll = function() {
 console.log("point" + this.setPlayerPoint())
 //this.shooter = 0; Need to reset shooter to 0 after each roll
-let shooter = dice.rollDice(2);
-console.log("shooter" + shooter)
+let shooter = 2;//dice.rollDice(2);
+console.log("Current Dice Roll: " + shooter)
 //add payout to bank
 switch (shooter) {
 case this.shooter = this.setPlayerPoint():
@@ -69,7 +69,7 @@ this.gameMessage =  "You rolled a: " + shooter + crapscash.minusPlyrLoss();;
 this.gameStatus =2;
 break;
 case 2:
-this.gameMessage = +   "You rolled a: " + shooter +crapscash.addPlyrWinnings();
+this.gameMessage =  "You rolled a: " + shooter +crapscash.addPlyrWinnings();
 // addWinnings();
 this.gameStatus =1;
 break;
@@ -83,5 +83,12 @@ return "</br>" + this.gameMessage;
 nextDiceRoll(){
     this.displayElement.innerHTML += this.nextRoll();
 }
+/*  Functions to make
 
+playAgain(){
+    
+    let craps
+    
+}
+*/
 }
