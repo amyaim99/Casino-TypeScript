@@ -172,7 +172,6 @@ var BlackJack = /** @class */ (function () {
             this.userInputElement2.value = "";
         }
         else if (this.totalBetAMount == 0) {
-            console.log(this.blackJackPlayer.getMoney());
             this.quit();
             this.displayElement.innerHTML += "</br>You finished your money.";
             this.userInputElement2.value = "";
@@ -403,6 +402,8 @@ var BlackJack = /** @class */ (function () {
 //     blackJack.dealerHit();
 // }
 // } 
+/// <reference path="BlackJack.ts" />
+describe;
 /// <reference path="Player.ts" />
 /// <reference path="Card.ts" />
 /// <reference path="Deck.ts" />
@@ -665,12 +666,11 @@ var GoFishGame = /** @class */ (function () {
     };
     return GoFishGame;
 }());
-/// <reference path="BlackJackConsole.ts" />
+/// <reference path="BlackJack.ts" />
 /// <reference path="GoFish.ts" />
 /// <reference path="GoFishGame.ts" />
 var goFishGame = new GoFishGame();
 var goFish = new GoFish();
 var blackJack = new BlackJack();
-//let blackJackConsole = new BlackJackConsole()
 blackJack.startGame();
 //# sourceMappingURL=app1.js.map

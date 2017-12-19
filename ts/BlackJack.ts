@@ -50,6 +50,7 @@ class BlackJack{
         this.playAgainButton.disabled= true;
         this.getHandButton.disabled = true;
     }
+    
     setPlayerName():string{
         let inputName = this.userInputElement.value
         if(inputName == ""){
@@ -79,7 +80,6 @@ class BlackJack{
             this.userInputElement2.value="";
         }
         else if( this.totalBetAMount==0){
-            console.log(this.blackJackPlayer.getMoney())
             this.quit();
             this.displayElement.innerHTML += "</br>You finished your money.";
             this.userInputElement2.value="";
@@ -123,6 +123,7 @@ class BlackJack{
         this.standButton.disabled = false;
     }
     }
+
     enableQuitAndPlayAGainButNotHitButtton(){
         this.hitButton.disabled = true;
         this.standButton.disabled = true;
@@ -162,6 +163,7 @@ class BlackJack{
         }
         return false;
     }
+
     giveDealerHand(){
         this.dealerHand = this.giveHand(this.dealerHand);
         }
@@ -189,6 +191,7 @@ class BlackJack{
                 this.dealerScoreCheck(this.dealerHand)
                 }
     }
+
     dealerScoreCheck(cards:Card[]){
         let betAmount: number = parseInt(this.userInputElement2.value);
         let prevAmount: number = this.blackJackPlayer.getMoney();

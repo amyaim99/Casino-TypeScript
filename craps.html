@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link href="./css/style.css" type="text/css" rel="stylesheet">
+    <title>TypeScript Casino | Zipcode Wilmington</title>
+</head>
+<body>
+    <header class="main-header group">
+        <div class="title"></div>
+        <div class="lesson-link"><img src="./images/logos/blackjack.jpg" alt="Casino"/></div>
+        <div class="zip-link"><img src="./images/logos/zip_logo.jpg" alt="Zipcode Wilmington"/></div>
+    </header>
+
+    <h1>Casino</h1>
+    
+    <font size="8" color="red">Welcome to Craps Table </font></br>
+    <img src="./images/logos/craps2.jpg" alt="Craps" style="width:1000px;height:150px;">  
+    <section id="main">
+            <div id="display"></div>
+    
+                <div id="input">
+                    <form>  <input type="text" name="plyrCashToTable" id="plyrCashToTable" required>
+                        <input type="submit" value="Money at table" onclick="crapscash.plyrCashToTable()"></div><p></p></form>
+                      
+                        <input type="text" name="plyrBet" id="plyrBet">
+                        <input type="submit" value="Place A bet" onclick="crapscash.currentPlyrBet()"></div><p></p>
+                    <!--<input type="text" name="user_input" id="user_input">-->
+                    <input type="submit" value="Roll Dice" onclick= "craps.firstDiceRoll()">
+                    <input type="submit" value="Roll Dice 2" onclick= "craps.nextDiceRoll()">
+                </div>
+   
+            <a href="index.html" class="button2">Home Page</a>
+    </section>
+
+
+ 	<script type="text/javascript" src="js/app1.js"></script>
+</body>
+</html>
